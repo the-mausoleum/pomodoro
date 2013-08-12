@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	var startTime = new Date();
 	//$('#controls').html('<button type="button" class="btn btn-lg btn-primary" id="start"><span class="button-text" id="start-text">开始</span></button>');
 	
 	$('#start').click(function() {
