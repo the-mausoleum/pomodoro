@@ -1,7 +1,7 @@
+var startTime = new Date();
+
 $(document).ready(function() {
-	var startTime = new Date();
-	var i;
-	//$('#controls').html('<button type="button" class="btn btn-lg btn-primary" id="start"><span class="button-text" id="start-text">开始</span></button>');
+	var id;
 	
 	$('#start').click(function() {
 		console.log('start');
@@ -9,7 +9,35 @@ $(document).ready(function() {
 		$('#start').css('display', 'none');
 		$('#stop').css('display', 'inline');
 		
-		i = setInterval('timer();', 1000);
+		var startTime = new Date();
+		var endTime = new Date(startTime.getTime());
+	
+		//endTime.setMinutes(startTime.getMinutes() + 25);
+		endTime.setSeconds(startTime.getSeconds() + 10);
+		
+		var msec = endTime.getTime() - startTime.getTime();
+		
+		id = setInterval(function() {
+			msec -= 1000;
+			var sec = Math.floor(msec / 1000);
+			var min = Math.floor(sec / 60);
+			
+			sec = sec % 60;
+			min = min % 60;
+			
+			if (sec < 10) {
+				sec = '0' + sec;
+			}
+			if (min < 10) {
+				min = '0' + min;
+			}
+			
+			if (msec < 0) {
+				return;
+			}
+			
+			$('#timer').text(min + ':' + sec);
+		}, 1000);
 		
 /*		var endTime = new Date();
 		endTime.setMinutes(startTime.getMinutes() + 25)
@@ -23,15 +51,19 @@ $(document).ready(function() {
 		$('#stop').css('display', 'none');
 		$('#start').css('display', 'inline');
 		
-		clearInterval(i);
+		clearInterval(id);
+		$('#timer').text('25:00');
 	});
+	
+	
+
 });
 
-function timer() {
-	var startTime = new Date();
-	var endTime = new Date();
+/*function timer() {
+	//var startTime = new Date();
+	var endTime = new Date(startTime.getTime());
 	
-	endTime.setMinutes(endTime.getMinutes() + 25);
+	endTime.setMinutes(startTime.getMinutes() + 25);
 	console.log(endTime.getMinutes());
 	
 	var msec = endTime.getTime() - startTime.getTime();
@@ -51,7 +83,8 @@ function timer() {
 	
 	$('#timer').text(min + ':' + sec);
 	//var t = setTimeout('timer();', 1000);
-};
+};*/
+
 
 /*function countdown() {
 
