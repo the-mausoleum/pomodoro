@@ -3,6 +3,14 @@ h1 {
 	text-align: center;
 }
 
-#start-text {
+.button-text {
 	font-size: 15pt;
+}
+
+#start {
+
+}
+
+#stop {
+	display: none;
 }
