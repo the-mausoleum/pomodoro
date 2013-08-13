@@ -1,5 +1,3 @@
-var startTime = new Date();
-
 $(document).ready(function() {
 	var id;
 	
@@ -32,12 +30,49 @@ $(document).ready(function() {
 				min = '0' + min;
 			}
 			
-			if (msec < 0) {
-				return;
+			if (msec - 1000 < 0) {
+				if (true) {
+					$('#timer').text('00:00');
+					return;
+					//breakTimer();
+				}
 			}
 			
 			$('#timer').text(min + ':' + sec);
 		}, 1000);
+		
+		function breakTimer() {
+			clearInterval(id);
+			
+			var startTime = new Date();
+			var endTime = new Date(startTime.getTime());
+			
+			endTime.setMinutes(startTime.getMinutes() + 5);
+			
+			var msec = endTime.getTime() - startTime.getTime();
+			
+			id = setInterval(function() {
+				msec -= 1000;
+				var sec = Math.floor(msec / 1000);
+				var min = Math.floor(sec / 60);
+				
+				sec = sec % 60;
+				min = min % 60;
+				
+				if (sec < 10) {
+					sec = '0' + sec;
+				}
+				if (min < 10) {
+					min = '0' + min;
+				}
+				
+				if (msec < 0) {
+					return;
+				}
+				
+				$('#timer').text(min + ':' + sec);
+			}, 1000);
+		}
 		
 /*		var endTime = new Date();
 		endTime.setMinutes(startTime.getMinutes() + 25)
