@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var id;
+	var pondoriCount = 0;
 	
 	$('#start').click(function() {
 		console.log('start');
@@ -31,23 +32,53 @@ $(document).ready(function() {
 			}
 			
 			if (msec - 1000 < 0) {
-				if (true) {
+				pondoriCount += 1;
+				if (alarm() && pondoriCount % 4 == 0) {
 					$('#timer').text('00:00');
-					return;
-					//breakTimer();
+					breakTimer(true);
+					msec = reset();
+				} else if (alarm()) {
+					breakTimer(false);
+					msec = reset();
 				}
 			}
 			
 			$('#timer').text(min + ':' + sec);
 		}, 1000);
 		
-		function breakTimer() {
+		function alarm() {
+			return true;
+		}
+		
+		function reset() {
+			//clearInterval(id);
+			
+			var startTime = new Date();
+			var endTime = new Date(startTime.getTime());
+		
+			//endTime.setMinutes(startTime.getMinutes() + 25);
+			endTime.setSeconds(startTime.getSeconds() + 10);
+			
+			var msec = endTime.getTime() - startTime.getTime();
+			
+			return msec;
+		}
+		
+		function breakTimer(long) {
 			clearInterval(id);
 			
 			var startTime = new Date();
 			var endTime = new Date(startTime.getTime());
 			
-			endTime.setMinutes(startTime.getMinutes() + 5);
+			if (long) {
+				console.log('long break');
+				//endTime.setMinutes(startTime.getMinutes() + 15);
+				endTime.setSeconds(startTime.getSeconds() + 5);
+			} else {
+				console.log('short break');
+				//endTime.setMinutes(startTime.getMinutes() + 5);
+				endTime.setSeconds(startTime.getSeconds() + 1);
+			}
 			
 			var msec = endTime.getTime() - startTime.getTime();
 			
@@ -67,6 +98,8 @@ $(document).ready(function() {
 				}
 				
 				if (msec < 0) {
+					clearInterval(id);
+					console.log('return');
 					return;
 				}
 				
