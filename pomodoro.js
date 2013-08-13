@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var id;
+	var pomodoriCount = 0;
 	
 	$('#start').click(function() {
 		console.log('start');
@@ -13,47 +14,16 @@ $(document).ready(function() {
 		//endTime.setMinutes(startTime.getMinutes() + 25);
 		endTime.setSeconds(startTime.getSeconds() + 10);
 		
-		var msec = endTime.getTime() - startTime.getTime();
+		var time = endTime.getTime() - startTime.getTime();
 		
-		id = setInterval(function() {
-			msec -= 1000;
-			var sec = Math.floor(msec / 1000);
-			var min = Math.floor(sec / 60);
-			
-			sec = sec % 60;
-			min = min % 60;
-			
-			if (sec < 10) {
-				sec = '0' + sec;
-			}
-			if (min < 10) {
-				min = '0' + min;
-			}
-			
-			if (msec - 1000 < 0) {
-				if (true) {
-					$('#timer').text('00:00');
-					return;
-					//breakTimer();
-				}
-			}
-			
-			$('#timer').text(min + ':' + sec);
-		}, 1000);
+		pomodoro(time);
 		
-		function breakTimer() {
+		function pomodoro(time) {
 			clearInterval(id);
 			
-			var startTime = new Date();
-			var endTime = new Date(startTime.getTime());
-			
-			endTime.setMinutes(startTime.getMinutes() + 5);
-			
-			var msec = endTime.getTime() - startTime.getTime();
-			
 			id = setInterval(function() {
-				msec -= 1000;
-				var sec = Math.floor(msec / 1000);
+				time -= 1000;
+				var sec = Math.floor(time / 1000);
 				var min = Math.floor(sec / 60);
 				
 				sec = sec % 60;
@@ -66,12 +36,52 @@ $(document).ready(function() {
 					min = '0' + min;
 				}
 				
-				if (msec < 0) {
-					return;
+				if (time - 1000 < 0) {
+					pomodoriCount += 1;
+					if (alarm() && pomodoriCount % 4 == 0) {
+						//$('#timer').text('00:00');
+						time = longBreakTimer(2000);
+						return;
+					} else if (alarm()) {
+						shortBreakTimer(4000);
+						return;
+					}
 				}
 				
 				$('#timer').text(min + ':' + sec);
 			}, 1000);
+		}
+		
+		function alarm() {
+			return true;
+		}
+		
+		function shortBreakTimer(time) {
+			clearInterval(id);
+			
+			/*var startTime = new Date();
+			var endTime = new Date(startTime.getTime());
+			
+			endTime.setMinutes(startTime.getMinutes() + 5);
+			
+			time = endTime.getTime() - startTime.getTime();*/
+			console.log('short break');
+			pomodoro(time);
+		}
+		
+		function longBreakTimer(time) {
+			clearInterval(id);
+			
+			var startTime = new Date();
+			var endTime = new Date(startTime.getTime());
+			
+			endTime.setMinutes(startTime.getMinutes() + 30);
+			
+			time = endTime.getTime() - startTime.getTime();
+			
+			console.log('long break');
+			//pomodoro(time);
+			return time;
 		}
 		
 /*		var endTime = new Date();
@@ -93,66 +103,3 @@ $(document).ready(function() {
 	
 
 });
-
-/*function timer() {
-	//var startTime = new Date();
-	var endTime = new Date(startTime.getTime());
-	
-	endTime.setMinutes(startTime.getMinutes() + 25);
-	console.log(endTime.getMinutes());
-	
-	var msec = endTime.getTime() - startTime.getTime();
-	console.log(msec);
-	var sec = Math.floor(msec / 1000);
-	var min = Math.floor(sec / 60);
-	
-	sec = sec % 60;
-	min = min % 60;
-	
-	if (sec < 10) {
-		sec = '0' + sec;
-	}
-	if (min < 10) {
-		min = '0' + min;
-	}
-	
-	$('#timer').text(min + ':' + sec);
-	//var t = setTimeout('timer();', 1000);
-};*/
-
-
-/*function countdown() {
-
-var currentDate = new Date(); // Today's Date
-
-var targetDate = new Date(); // Date we are counting down to
-targetDate.setMonth(0,1); // (from 0-11; month), (from 1-31; date)
-targetDate.setFullYear(2010);
-targetDate.setHours(0);
-targetDate.setMinutes(0);
-targetDate.setSeconds(0);
-targetDate.setMilliseconds(0);
-
-var msec = targetDate.getTime() - currentDate.getTime(); // The time left in milliseconds
-var sec = Math.floor(msec / 1000);
-var mins = Math.floor(sec / 60);
-var hours = Math.floor(mins / 60);
-var days = Math.floor(hours / 24);
-sec = sec % 60;
-mins = mins % 60;
-hours = hours % 24;
-
- //Add Leading Zeros to Hours, Min, Sec
-if (sec < 10) {
-    sec = '0'+sec;
-}
-if (mins < 10) {
-    mins = '0'+mins;
-}
-if (hours < 10) {
-    hours = '0'+hours;
-}
-
-document.getElementById('countdown').innerHTML = days+':'+hours+':'+mins+':'+sec;
-var t = setTimeout('countdown();',1000);
-}*/
