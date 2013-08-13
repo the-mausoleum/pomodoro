@@ -38,8 +38,12 @@ $(document).ready(function() {
 					breakTimer(true);
 					msec = reset();
 				} else if (alarm()) {
-					breakTimer(false);
-					msec = reset();
+					console.log('start break');
+					if (breakTimer(false)) {
+						console.log('break finished');
+						msec = reset();
+						console.log(msec);
+					}
 				}
 			}
 			
@@ -98,13 +102,14 @@ $(document).ready(function() {
 				}
 				
 				if (msec < 0) {
+					console.log('clear');
 					clearInterval(id);
-					console.log('return');
-					return;
 				}
 				
 				$('#timer').text(min + ':' + sec);
 			}, 1000);
+			
+			return true;
 		}
 		
 /*		var endTime = new Date();
